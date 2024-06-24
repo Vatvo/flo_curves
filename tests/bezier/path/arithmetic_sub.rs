@@ -610,3 +610,85 @@ fn subtract_chequerboard() {
         }
     }
 }
+
+#[test]
+fn subtract_multiple_partial_overlap() {
+
+    let base_shape = vec![
+        BezierPathBuilder::<SimpleBezierPath>::start(Coord2(88.0, 208.0))
+            .curve_to((Coord2(192.0, 208.0), Coord2(88.0, 208.0)), Coord2(192.0, 208.0))
+            .curve_to((Coord2(277.35, 208.0), Coord2(362.67, 208.0)), Coord2(448.0, 208.0))
+            .curve_to((Coord2(448.0, 201.76), Coord2(448.0, 195.53)), Coord2(448.0, 189.3))
+            .curve_to((Coord2(429.39, 182.69), Coord2(416.0, 164.9)), Coord2(416.0, 144.0))
+            .curve_to((Coord2(416.0, 66.66), Coord2(416.0, 45.33)), Coord2(416.0, 24.0))
+            .curve_to((Coord2(416.0, 10.69), Coord2(426.7, 0.0)), Coord2(440.0, 0.0))
+            .curve_to((Coord2(605.33, 0.0), Coord2(610.66, 0.0)), Coord2(616.0, 0.0))
+            .curve_to((Coord2(629.29, 0.0), Coord2(640.0, 10.69)), Coord2(640.0, 24.0))
+            .curve_to((Coord2(640.0, 117.33), Coord2(640.0, 130.66)), Coord2(640.0, 144.0))
+            .curve_to((Coord2(640.0, 164.89), Coord2(626.59, 182.69)), Coord2(608.0, 189.3))
+            .curve_to((Coord2(608.0, 278.21), Coord2(608.0, 367.1)), Coord2(608.0, 456.0))
+            .curve_to((Coord2(608.0, 486.89), Coord2(582.9, 512.0)), Coord2(552.0, 512.0))
+            .curve_to((Coord2(189.32, 512.0), Coord2(138.66, 512.0)), Coord2(88.0, 512.0))
+            .build(),
+        BezierPathBuilder::<SimpleBezierPath>::start(Coord2(448.0, 224.0))
+            .curve_to((Coord2(362.64, 224.0), Coord2(277.32, 224.0)), Coord2(192.0, 224.0))
+            .curve_to((Coord2(192.0, 314.68), Coord2(192.0, 405.34)), Coord2(192.0, 496.0))
+            .curve_to((Coord2(208.0, 496.0), Coord2(224.0, 496.0)), Coord2(240.0, 496.0))
+            .curve_to((Coord2(240.0, 461.32), Coord2(240.0, 426.66)), Coord2(240.0, 392.0))
+            .curve_to((Coord2(240.0, 347.79), Coord2(275.79, 312.0)), Coord2(320.0, 312.0))
+            .curve_to((Coord2(364.2, 312.0), Coord2(400.0, 347.79)), Coord2(400.0, 392.0))
+            .curve_to((Coord2(400.0, 426.67), Coord2(400.0, 461.33)), Coord2(400.0, 496.0))
+            .curve_to((Coord2(416.0, 496.0), Coord2(432.0, 496.0)), Coord2(448.0, 496.0))
+            .curve_to((Coord2(448.0, 405.31), Coord2(448.0, 314.65)), Coord2(448.0, 224.0))
+            .build(),
+        BezierPathBuilder::<SimpleBezierPath>::start(Coord2(272.0, 496.0))
+            .curve_to((Coord2(373.33, 496.0), Coord2(378.66, 496.0)), Coord2(384.0, 496.0))
+            .curve_to((Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0))
+            .curve_to((Coord2(384.0, 356.7), Coord2(355.29, 328.0)), Coord2(320.0, 328.0))
+            .curve_to((Coord2(284.7, 328.0), Coord2(256.0, 356.7)), Coord2(256.0, 392.0))
+            .curve_to((Coord2(256.0, 485.33), Coord2(256.0, 490.66)), Coord2(256.0, 496.0))
+            .build(),
+        BezierPathBuilder::<SimpleBezierPath>::start(Coord2(528.0, 16.0)) //Right Crenellation
+            .curve_to((Coord2(450.66, 16.0), Coord2(445.33, 16.0)), Coord2(440.0, 16.0))
+            .curve_to((Coord2(435.6, 16.0), Coord2(432.0, 19.6)), Coord2(432.0, 24.0))
+            .curve_to((Coord2(432.0, 117.33), Coord2(432.0, 130.66)), Coord2(432.0, 144.0))
+            .curve_to((Coord2(432.0, 161.69), Coord2(446.29, 176.0)), Coord2(464.0, 176.0))
+            .curve_to((Coord2(506.67, 176.0), Coord2(549.33, 176.0)), Coord2(592.0, 176.0))
+            .curve_to((Coord2(609.7, 176.0), Coord2(624.0, 161.69)), Coord2(624.0, 144.0))
+            .curve_to((Coord2(624.0, 66.66), Coord2(624.0, 45.33)), Coord2(624.0, 24.0))
+            .curve_to((Coord2(624.0, 19.6), Coord2(620.4, 16.0)), Coord2(616.0, 16.0))
+            .build()
+    ];
+    let cutout_shape = vec![
+        BezierPathBuilder::<SimpleBezierPath>::start(Coord2(384.0, 352.0))
+            .curve_to((Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0)) //This line required custom rounding. I truncated every other number in the test but this one required rounding up to make the bug happen.
+            .curve_to((Coord2(384.0, 491.7), Coord2(387.1, 502.6)), Coord2(392.6, 512.0))
+            .curve_to((Coord2(475.08, 512.0), Coord2(557.54, 512.0)), Coord2(640.0, 512.0))
+            .curve_to((Coord2(640.0, 440.18), Coord2(640.0, 368.39)), Coord2(640.0, 296.6))
+            .curve_to((Coord2(640.0, 288.39), Coord2(640.0, 280.19)), Coord2(640.0, 272.0))
+            .curve_to((Coord2(640.0, 210.1), Coord2(589.9, 160.0)), Coord2(528.0, 160.0))
+            .curve_to((Coord2(466.09, 160.0), Coord2(416.0, 210.1)), Coord2(416.0, 272.0))
+            .curve_to((Coord2(416.0, 280.2), Coord2(416.0, 288.4)), Coord2(416.0, 296.6))
+            .curve_to((Coord2(396.89, 307.6), Coord2(384.0, 328.29)), Coord2(384.0, 352.0))
+            .build()
+    ];
+
+    let mut merged_path = GraphPath::new();
+    merged_path = merged_path.merge(GraphPath::from_merged_paths(
+        base_shape.iter().map(|path| (path, PathLabel(0))),
+    ));
+
+    let mut final_graph_path = merged_path.collide(
+        GraphPath::from_merged_paths(cutout_shape.iter().map(|path| (path, PathLabel(1)))),
+        0.1,
+    );
+
+    final_graph_path.set_exterior_by_subtracting();
+    final_graph_path.heal_exterior_gaps();
+
+    for edge in final_graph_path.all_edges() {
+        if edge.start_point() == Coord2(256.0, 392.0) && edge.end_point() == Coord2(256.0, 496.0) {
+            assert!(edge.kind() == GraphPathEdgeKind::Exterior);
+        }
+    }
+}
