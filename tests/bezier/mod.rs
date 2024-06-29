@@ -23,7 +23,7 @@ mod overlaps_tests;
 mod intersection;
 mod characteristics;
 mod self_intersection;
-mod curve_intersection_clip;
+mod curve_intersection_clip_tests;
 mod length;
 mod walk;
 mod distort;
