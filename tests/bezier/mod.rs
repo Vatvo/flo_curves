@@ -19,7 +19,7 @@ mod deform;
 mod search;
 mod solve;
 mod offset;
-mod overlaps;
+mod overlaps_tests;
 mod intersection;
 mod characteristics;
 mod self_intersection;
