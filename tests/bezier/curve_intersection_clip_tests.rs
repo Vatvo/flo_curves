@@ -475,9 +475,11 @@ fn intersection_curve_8() {
 
 #[test]
 fn intersection_curve_9() {
+    // curve2 crosses curve1 and then just barely crosses back again: should be exactly two collisions
     let curve1 = bezier::Curve::from_points(Coord2(576.0272827148438, 854.4729614257813), (Coord2(575.8976440429688, 855.9894409179688), Coord2(576.928466796875, 870.5877685546875)), Coord2(577.4629516601563, 873.9253540039063));
     let curve2 = bezier::Curve::from_points(Coord2(576.0455932617188, 854.9674072265625), (Coord2(574.2247924804688, 855.3988037109375), Coord2(577.3884887695313, 863.1025390625)), Coord2(580.003662109375, 863.5904541015625));
     
+    // Collide both forwards and backwards and also reverse one side of the collisions
     let intersections1 = bezier::curve_intersects_curve_clip(&curve1, &curve2, 0.01);
     let intersections2 = bezier::curve_intersects_curve_clip(&curve2, &curve1, 0.01);
     let intersections3 = bezier::curve_intersects_curve_clip(&curve1.reverse::<bezier::Curve<_>>(), &bezier::Curve::from_curve(&curve2), 0.01);
@@ -488,15 +490,13 @@ fn intersection_curve_9() {
     println!("{:?}", intersections3);
     println!("{:?}", intersections4);
 
-    assert!(intersections1.len() == intersections3.len());
-    assert!(intersections2.len() == intersections3.len());
-    assert!(intersections1.len() == intersections4.len());
-    assert!(intersections2.len() == intersections4.len());
     assert!(intersections1.len() > 0);
     assert!(intersections2.len() > 0);
 
-    assert!(intersections1.len() == 2);
-    assert!(intersections2.len() == 2);
+    assert!(intersections1.len() == 2, "{} (curve1 intersected with curve2, should produce 2 collisions)", intersections1.len());
+    assert!(intersections2.len() == 2, "{} (curve2 intersected with curve1, should produce 2 collisions)", intersections2.len());
+    assert!(intersections3.len() == 2, "{} (curve1 reversed intersected with curve2, should produce 2 collisions)", intersections3.len());
+    assert!(intersections4.len() == 2, "{} (curve2 reversed intersected with curve1, should produce 2 collisions)", intersections4.len());
 }
 
 #[test]
