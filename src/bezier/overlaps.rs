@@ -16,6 +16,7 @@ where   C1::Point:  Coordinate+Coordinate2D,
     // Start by assuming that curve 2 overlaps curve 1 completely
     let mut c2_t1 = 0.0;
     let mut c2_t2 = 1.0;
+    let mut overlapping_endpoints = false;
 
     // The start and end points of curve1 should be on curve2
     let c2_start    = curve2.start_point();
@@ -28,12 +29,22 @@ where   C1::Point:  Coordinate+Coordinate2D,
         // curve1 starts on a point of curve2
         c2_t1 = t;
         0.0
+    } else if let (Some(t1), Some(t2)) = (curve1.t_for_point(&curve2.end_point()), curve2.t_for_point(&curve1.end_point())) {
+        // End points are part of both curves, but start points are not
+        c2_t1 = t2;
+        c2_t2 = 1.0;
+
+        overlapping_endpoints = true;
+        t1
     } else {
         // Neither point is on the curve
         return None;
     };
 
-    let c1_t2 = if let Some(t) = curve1.t_for_point(&c2_end) {
+    let c1_t2 = if overlapping_endpoints {
+        // Rare case: the curves overlap at the end points only
+        1.0
+    } else if let Some(t) = curve1.t_for_point(&c2_end) {
         // End point is on the curve
         t
     } else if let Some(t) = curve2.t_for_point(&curve1.end_point()) {
