@@ -166,7 +166,7 @@ impl<Point: Coordinate+Coordinate2D, Label: Copy> GraphPath<Point, Label> {
 
         for (src_curve, tgt_curve) in sweep_against(collide_src.iter(), collide_tgt.iter()) {
             // Find any collisions between the two edges (to the required accuracy)
-            let mut edge_collisions                 = curve_intersects_curve_clip(src_curve, tgt_curve, accuracy);
+            let mut edge_collisions = curve_intersects_curve_clip(src_curve, tgt_curve, accuracy);
             if edge_collisions.is_empty() { continue; }
 
             // Remove any pairs of collisions that are too close together
