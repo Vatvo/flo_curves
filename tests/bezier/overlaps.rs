@@ -136,6 +136,36 @@ fn collinear_lines_2() {
 }
 
 #[test]
+fn collinear_lines_3a() {
+    // These lines overlap each other like this:
+    //      *------->
+    //          <-------*
+    let line1 = Curve::from_points(Coord2(384.0, 352.0), (Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0));
+    let line2 = Curve::from_points(Coord2(384.0, 496.0), (Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0));
+
+    let overlaps = overlapping_region(&line1, &line2);
+    assert!(overlaps.is_some(), "{:?}", overlaps);
+}
+
+#[test]
+fn collinear_lines_3b() {
+    let line1 = Curve::from_points(Coord2(384.0, 352.0), (Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0));
+    let line2 = Curve::from_points(Coord2(384.0, 496.0), (Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0));
+
+    let overlaps = overlapping_region(&line2, &line1);
+    assert!(overlaps.is_some(), "{:?}", overlaps);
+}
+
+#[test]
+fn collinear_lines_3c() {
+    let line1 = Curve::from_points(Coord2(384.0, 352.0), (Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0));
+    let line2 = Curve::from_points(Coord2(384.0, 392.0), (Coord2(384.0, 421.33), Coord2(384.0, 450.66)), Coord2(384.0, 496.0));
+
+    let overlaps = overlapping_region(&line2, &line1);
+    assert!(overlaps.is_some(), "{:?}", overlaps);
+}
+
+#[test]
 fn collinear_lines_both_overlap_partial_same_direction() {
     let line1 = (Coord2(384.0, 448.0), Coord2(384.0, 274.3));
     let line2 = (Coord2(384.0, 480.0), Coord2(384.0, 352.0));
