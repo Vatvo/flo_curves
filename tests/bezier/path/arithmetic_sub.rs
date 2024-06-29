@@ -1,6 +1,7 @@
 use super::checks::*;
 use super::permute::*;
 
+use flo_curves::debug::*;
 use flo_curves::*;
 use flo_curves::arc::*;
 use flo_curves::bezier::path::*;
@@ -721,6 +722,8 @@ fn subtract_multiple_partial_overlap() {
 
     final_graph_path.set_exterior_by_subtracting();
     final_graph_path.heal_exterior_gaps();
+
+    println!("{}", graph_path_svg_string(&final_graph_path, vec![]));
 
     for edge in final_graph_path.all_edges() {
         if edge.start_point() == Coord2(256.0, 392.0) && edge.end_point() == Coord2(256.0, 496.0) {
