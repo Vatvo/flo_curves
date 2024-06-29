@@ -6,7 +6,7 @@ mod point;
 mod path;
 mod intersection;
 mod bounds;
-mod graph_path;
+mod graph_path_tests;
 mod is_clockwise;
 mod arithmetic_add;
 mod arithmetic_chain_add;
