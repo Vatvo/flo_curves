@@ -480,10 +480,18 @@ fn intersection_curve_9() {
     
     let intersections1 = bezier::curve_intersects_curve_clip(&curve1, &curve2, 0.01);
     let intersections2 = bezier::curve_intersects_curve_clip(&curve2, &curve1, 0.01);
+    let intersections3 = bezier::curve_intersects_curve_clip(&curve1.reverse::<bezier::Curve<_>>(), &bezier::Curve::from_curve(&curve2), 0.01);
+    let intersections4 = bezier::curve_intersects_curve_clip(&curve2.reverse::<bezier::Curve<_>>(), &bezier::Curve::from_curve(&curve1), 0.01);
 
     println!("{:?}", intersections1);
     println!("{:?}", intersections2);
+    println!("{:?}", intersections3);
+    println!("{:?}", intersections4);
 
+    assert!(intersections1.len() == intersections3.len());
+    assert!(intersections2.len() == intersections3.len());
+    assert!(intersections1.len() == intersections4.len());
+    assert!(intersections2.len() == intersections4.len());
     assert!(intersections1.len() > 0);
     assert!(intersections2.len() > 0);
 
@@ -558,6 +566,8 @@ fn intersection_curve_11() {
     assert!(intersections2.len() > 0);
     assert!(intersections3.len() > 0);
 
+    assert!(intersections3.len() == intersections1.len());
+    assert!(intersections3.len() == intersections2.len());
     assert!(intersections1.len() == 2);
     assert!(intersections2.len() == 2);
     assert!(intersections3.len() == 2);
