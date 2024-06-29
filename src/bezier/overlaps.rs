@@ -31,8 +31,8 @@ where   C1::Point:  Coordinate+Coordinate2D,
         0.0
     } else if let (Some(t1), Some(t2)) = (curve1.t_for_point(&curve2.end_point()), curve2.t_for_point(&curve1.end_point())) {
         // End points are part of both curves, but start points are not
-        c2_t1 = t2;
-        c2_t2 = 1.0;
+        c2_t1 = 1.0;
+        c2_t2 = t2;
 
         overlapping_endpoints = true;
         t1
