@@ -82,7 +82,7 @@ pub trait BezierCurve: Geo+Clone+Sized {
     ///
     /// Reverses the direction of this curve
     /// 
-    fn reverse<Curve: BezierCurveFactory<Point=Self::Point>>(self) -> Curve {
+    fn reverse<Curve: BezierCurveFactory<Point=Self::Point>>(&self) -> Curve {
         let (cp1, cp2) = self.control_points();
         Curve::from_points(self.end_point(), (cp2, cp1), self.start_point())
     }
