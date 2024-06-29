@@ -547,14 +547,20 @@ fn intersection_curve_11() {
 
     let intersections2 = bezier::curve_intersects_curve_clip(&curve2, &curve1, 0.01);
 
+    // intersections3 reverses the curves so the overlap happens at the start instead of the end
+    let intersections3 = bezier::curve_intersects_curve_clip(&curve1.reverse::<bezier::Curve<_>>(), &bezier::Curve::from_curve(&curve2), 0.01);
+
     println!("{:?}", intersections1);
     println!("{:?}", intersections2);
+    println!("{:?}", intersections3);
 
     assert!(intersections1.len() > 0);
     assert!(intersections2.len() > 0);
+    assert!(intersections3.len() > 0);
 
     assert!(intersections1.len() == 1);
     assert!(intersections2.len() == 1);
+    assert!(intersections3.len() == 1);
 
     let pos1 = curve1.point_at_pos(intersections1[0].0);
     let pos2 = curve2.point_at_pos(intersections1[0].1);
