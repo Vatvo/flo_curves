@@ -558,15 +558,31 @@ fn intersection_curve_11() {
     assert!(intersections2.len() > 0);
     assert!(intersections3.len() > 0);
 
-    assert!(intersections1.len() == 1);
-    assert!(intersections2.len() == 1);
-    assert!(intersections3.len() == 1);
+    assert!(intersections1.len() == 2);
+    assert!(intersections2.len() == 2);
+    assert!(intersections3.len() == 2);
 
     let pos1 = curve1.point_at_pos(intersections1[0].0);
     let pos2 = curve2.point_at_pos(intersections1[0].1);
 
     let pos3 = curve2.point_at_pos(intersections2[0].0);
     let pos4 = curve1.point_at_pos(intersections2[0].1);
+
+    println!("{:?}", pos1.distance_to(&pos2));
+    println!("{:?}", pos3.distance_to(&pos4));
+    println!("{:?}", pos3.distance_to(&pos2));
+    println!("{:?}", pos1.distance_to(&pos4));
+
+    assert!(pos1.distance_to(&pos2) < 0.02);
+    assert!(pos3.distance_to(&pos4) < 0.02);
+    assert!(pos2.distance_to(&pos3) < 0.02);
+    assert!(pos1.distance_to(&pos4) < 0.02);
+
+    let pos1 = curve1.point_at_pos(intersections1[1].0);
+    let pos2 = curve2.point_at_pos(intersections1[1].1);
+
+    let pos3 = curve2.point_at_pos(intersections2[1].0);
+    let pos4 = curve1.point_at_pos(intersections2[1].1);
 
     println!("{:?}", pos1.distance_to(&pos2));
     println!("{:?}", pos3.distance_to(&pos4));
