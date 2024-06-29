@@ -523,6 +523,7 @@ fn intersection_curve_10() {
 
 // (0.49236699497857783, 0.5065132298924669) (0.47428429377321385, 0.4934869656848157
 // Intersection at 0.5064950379631311, 0.49346879469352817 (very close to the end of this range)
+// Curves also nearly overlap each other during the intersection
 #[test]
 fn intersection_curve_11() {
     // Tries to eliminate the subdivisions from intersection_curve_10 so will more reliably fail if other changes are made to
