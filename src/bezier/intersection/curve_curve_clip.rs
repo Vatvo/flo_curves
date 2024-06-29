@@ -297,8 +297,11 @@ where
 }
 
 ///
-/// Determines the points at which two curves intersect using the Bezier clipping
-/// algorihtm
+/// Determines the points at which two curves intersect using the Bezier clipping algorihtm
+///
+/// The result of this function is a list of 't' values for the two curves. The first item in the pair is the
+/// position of the intersection on the first curve, and the second is the corresponding position on the second
+/// curve.
 /// 
 pub fn curve_intersects_curve_clip<'a, C: BezierCurve>(curve1: &'a C, curve2: &'a C, accuracy: f64) -> SmallVec<[(f64, f64); 8]>
 where 
