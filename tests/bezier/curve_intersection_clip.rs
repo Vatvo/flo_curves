@@ -688,3 +688,48 @@ fn collinear_lines_2() {
 
     assert!(collisions.len() == 2);
 }
+
+#[test]
+fn collinear_lines_3a() {
+    // These lines overlap each other like this:
+    //      *------->
+    //          <-------*
+    // - should produce two collisions at the ends of both lines
+    let line1 = bezier::Curve::from_points(Coord2(384.0, 352.0), (Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0));
+    let line2 = bezier::Curve::from_points(Coord2(384.0, 496.0), (Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0));
+
+    let collisions = bezier::curve_intersects_curve_clip(&line1, &line2, 0.01);
+
+    println!("{:?}", collisions);
+    println!("{:?}", bezier::overlapping_region(&line1, &line2));
+
+    assert!(collisions.len() == 2);
+}
+
+#[test]
+fn collinear_lines_3b() {
+    // As above, but with the ordering of the lines reversed
+    let line1 = bezier::Curve::from_points(Coord2(384.0, 352.0), (Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0));
+    let line2 = bezier::Curve::from_points(Coord2(384.0, 496.0), (Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0));
+
+    let collisions = bezier::curve_intersects_curve_clip(&line2, &line1, 0.01);
+
+    println!("{:?}", collisions);
+    println!("{:?}", bezier::overlapping_region(&line1, &line2));
+
+    assert!(collisions.len() == 2);
+}
+
+#[test]
+fn collinear_lines_3c() {
+    // As above, but with the lines moving in the same direction
+    let line1 = bezier::Curve::from_points(Coord2(384.0, 352.0), (Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0));
+    let line2 = bezier::Curve::from_points(Coord2(384.0, 392.0), (Coord2(384.0, 421.33), Coord2(384.0, 450.66)), Coord2(384.0, 496.0));
+
+    let collisions = bezier::curve_intersects_curve_clip(&line2, &line1, 0.01);
+
+    println!("{:?}", collisions);
+    println!("{:?}", bezier::overlapping_region(&line1, &line2));
+
+    assert!(collisions.len() == 2);
+}
