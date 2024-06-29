@@ -788,3 +788,28 @@ fn collinear_lines_3c() {
     assert!(line1_pos1.distance_to(&line2_pos1) <= 0.1, "Collision points mismatch");
     assert!(line1_pos2.distance_to(&line2_pos2) <= 0.1, "Collision points mismatch");
 }
+
+#[test]
+fn collinear_lines_4() {
+    // Two lines that completely overlap but are going in different directions
+    let line1 = bezier::Curve::from_points(Coord2(384.0, 352.0), (Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0));
+    let line2 = bezier::Curve::from_points(Coord2(384.0, 460.0), (Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0));
+
+    let collisions = bezier::curve_intersects_curve_clip(&line2, &line1, 0.01);
+
+    println!("{:?}", collisions);
+    println!("{:?}", bezier::overlapping_region(&line1, &line2));
+
+    assert!(collisions.len() == 2);
+
+    // Subdivide the two lines at the collision points
+    let line1_pos1 = line1.point_at_pos(collisions[0].1);
+    let line2_pos1 = line2.point_at_pos(collisions[0].0);
+    let line1_pos2 = line1.point_at_pos(collisions[1].1);
+    let line2_pos2 = line2.point_at_pos(collisions[1].0);
+
+    assert!(line1_pos1.distance_to(&line2_pos2) > 0.1, "Collision points reversed");
+    assert!(line1_pos2.distance_to(&line2_pos1) > 0.1, "Collision points reversed");
+    assert!(line1_pos1.distance_to(&line2_pos1) <= 0.1, "Collision points mismatch");
+    assert!(line1_pos2.distance_to(&line2_pos2) <= 0.1, "Collision points mismatch");
+}
