@@ -649,7 +649,7 @@ fn subtract_chequerboard() {
 
 #[test]
 fn subtract_multiple_partial_overlap() {
-
+    // There are two overlapping vertical lines moving in opposite directions here, which fail to collide properly (see also collinear_lines_3* in the overlaps and curve_intersection_clip tests)
     let base_shape = vec![
         BezierPathBuilder::<SimpleBezierPath>::start(Coord2(88.0, 208.0))
             .curve_to((Coord2(192.0, 208.0), Coord2(88.0, 208.0)), Coord2(192.0, 208.0))
