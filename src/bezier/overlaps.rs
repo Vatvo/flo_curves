@@ -78,6 +78,16 @@ where   C1::Point:  Coordinate+Coordinate2D,
         return None;
     }
 
+    if (c1_t1-c1_t2).abs() < 0.01 && (c1_t1 <= 0.0 || c1_t1 >= 1.0 || c1_t2 <= 0.0 || c1_t2 >= 1.0) {
+        // Might be a very tiny overlap at the end or the beginning
+        let c1_start    = curve1.point_at_pos(c1_t1);
+        let c1_end      = curve1.point_at_pos(c1_t2);
+
+        if c1_start.is_near_to(&c1_end, SMALL_DISTANCE) {
+            return None;
+        }
+    }
+
     // If curve1 and curve2 are collinear - two overlapping lines - we've already got the results (and the control points will differ anyway)
     #[inline]
     fn is_collinear<P: Coordinate2D>(p: &P, LineCoefficients(a, b, c): &LineCoefficients) -> bool {
