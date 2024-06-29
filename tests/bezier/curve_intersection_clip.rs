@@ -674,6 +674,17 @@ fn collinear_lines_1() {
     println!("{:?}", bezier::overlapping_region(&line1, &line2));
 
     assert!(collisions.len() == 2);
+
+    // Subdivide the two lines at the collision points
+    let line1_pos1 = line1.point_at_pos(collisions[0].0);
+    let line2_pos1 = line2.point_at_pos(collisions[0].1);
+    let line1_pos2 = line1.point_at_pos(collisions[1].0);
+    let line2_pos2 = line2.point_at_pos(collisions[1].1);
+
+    assert!(line1_pos1.distance_to(&line2_pos2) > 0.1, "Collision points reversed");
+    assert!(line1_pos2.distance_to(&line2_pos1) > 0.1, "Collision points reversed");
+    assert!(line1_pos1.distance_to(&line2_pos1) <= 0.1, "Collision points mismatch");
+    assert!(line1_pos2.distance_to(&line2_pos2) <= 0.1, "Collision points mismatch");
 }
 
 #[test]
@@ -687,6 +698,17 @@ fn collinear_lines_2() {
     println!("{:?}", bezier::overlapping_region(&line2, &line1));
 
     assert!(collisions.len() == 2);
+
+    // Subdivide the two lines at the collision points (note, the lines are reversed!)
+    let line1_pos1 = line1.point_at_pos(collisions[0].1);
+    let line2_pos1 = line2.point_at_pos(collisions[0].0);
+    let line1_pos2 = line1.point_at_pos(collisions[1].1);
+    let line2_pos2 = line2.point_at_pos(collisions[1].0);
+
+    assert!(line1_pos1.distance_to(&line2_pos2) > 0.1, "Collision points reversed");
+    assert!(line1_pos2.distance_to(&line2_pos1) > 0.1, "Collision points reversed");
+    assert!(line1_pos1.distance_to(&line2_pos1) <= 0.1, "Collision points mismatch");
+    assert!(line1_pos2.distance_to(&line2_pos2) <= 0.1, "Collision points mismatch");
 }
 
 #[test]
@@ -704,6 +726,17 @@ fn collinear_lines_3a() {
     println!("{:?}", bezier::overlapping_region(&line1, &line2));
 
     assert!(collisions.len() == 2);
+
+    // Subdivide the two lines at the collision points
+    let line1_pos1 = line1.point_at_pos(collisions[0].0);
+    let line2_pos1 = line2.point_at_pos(collisions[0].1);
+    let line1_pos2 = line1.point_at_pos(collisions[1].0);
+    let line2_pos2 = line2.point_at_pos(collisions[1].1);
+
+    assert!(line1_pos1.distance_to(&line2_pos2) > 0.1, "Collision points reversed");
+    assert!(line1_pos2.distance_to(&line2_pos1) > 0.1, "Collision points reversed");
+    assert!(line1_pos1.distance_to(&line2_pos1) <= 0.1, "Collision points mismatch");
+    assert!(line1_pos2.distance_to(&line2_pos2) <= 0.1, "Collision points mismatch");
 }
 
 #[test]
@@ -718,6 +751,17 @@ fn collinear_lines_3b() {
     println!("{:?}", bezier::overlapping_region(&line1, &line2));
 
     assert!(collisions.len() == 2);
+
+    // Subdivide the two lines at the collision points
+    let line1_pos1 = line1.point_at_pos(collisions[0].1);
+    let line2_pos1 = line2.point_at_pos(collisions[0].0);
+    let line1_pos2 = line1.point_at_pos(collisions[1].1);
+    let line2_pos2 = line2.point_at_pos(collisions[1].0);
+
+    assert!(line1_pos1.distance_to(&line2_pos2) > 0.1, "Collision points reversed");
+    assert!(line1_pos2.distance_to(&line2_pos1) > 0.1, "Collision points reversed");
+    assert!(line1_pos1.distance_to(&line2_pos1) <= 0.1, "Collision points mismatch");
+    assert!(line1_pos2.distance_to(&line2_pos2) <= 0.1, "Collision points mismatch");
 }
 
 #[test]
@@ -732,4 +776,15 @@ fn collinear_lines_3c() {
     println!("{:?}", bezier::overlapping_region(&line1, &line2));
 
     assert!(collisions.len() == 2);
+
+    // Subdivide the two lines at the collision points
+    let line1_pos1 = line1.point_at_pos(collisions[0].1);
+    let line2_pos1 = line2.point_at_pos(collisions[0].0);
+    let line1_pos2 = line1.point_at_pos(collisions[1].1);
+    let line2_pos2 = line2.point_at_pos(collisions[1].0);
+
+    assert!(line1_pos1.distance_to(&line2_pos2) > 0.1, "Collision points reversed");
+    assert!(line1_pos2.distance_to(&line2_pos1) > 0.1, "Collision points reversed");
+    assert!(line1_pos1.distance_to(&line2_pos1) <= 0.1, "Collision points mismatch");
+    assert!(line1_pos2.distance_to(&line2_pos2) <= 0.1, "Collision points mismatch");
 }
