@@ -1804,24 +1804,26 @@ pub fn collisions_with_edge_ends_1() {
     // Collide the two paths to get a result
     let rectangle1  = GraphPath::from_path(&rectangle1, PathLabel(0));
     let rectangle2  = GraphPath::from_path(&rectangle2, PathLabel(1));
-    let path        = rectangle1.collide(rectangle2, 0.1);
+    let path        = rectangle1.clone().collide(rectangle2.clone(), 0.1);
 
-    // TODO: add some assertions (this is working at the moment)
     println!("{}", graph_path_svg_string(&path, vec![]));
+
+    // Should create 2 extra edges in the path (the overlapped edges from both rectangles)
+    assert!(path.all_edges().count() == 10, "{} {} {}", rectangle1.all_edges().count() /* 4 */, rectangle2.all_edges().count() /* 4 */, path.all_edges().count() /* 10 - 4+4 plus one new */);
 }
 
 
 #[test]
 pub fn collisions_with_edge_ends_2() {
     // Two rectangles that overlap on a single edge, which is moving in a different direction
-    let rectangle1 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(272.0, 496.0))
+    let source1 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(272.0, 496.0))
             .curve_to((Coord2(373.33, 496.0), Coord2(378.66, 496.0)), Coord2(384.0, 496.0))
             .curve_to((Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0))
             .curve_to((Coord2(384.0, 356.7), Coord2(355.29, 328.0)), Coord2(320.0, 328.0))
             .curve_to((Coord2(284.7, 328.0), Coord2(256.0, 356.7)), Coord2(256.0, 392.0))
             .curve_to((Coord2(256.0, 485.33), Coord2(256.0, 490.66)), Coord2(256.0, 496.0))
             .build();
-    let rectangle2 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(384.0, 352.0))
+    let source2 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(384.0, 352.0))
             .curve_to((Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0)) //This line required custom rounding. I truncated every other number in the test but this one required rounding up to make the bug happen.
             .curve_to((Coord2(384.0, 491.7), Coord2(387.1, 502.6)), Coord2(392.6, 512.0))
             .curve_to((Coord2(475.08, 512.0), Coord2(557.54, 512.0)), Coord2(640.0, 512.0))
@@ -1834,12 +1836,15 @@ pub fn collisions_with_edge_ends_2() {
             .build();
 
     // Collide the two paths to get a result
-    let rectangle1  = GraphPath::from_path(&rectangle1, PathLabel(0));
-    let rectangle2  = GraphPath::from_path(&rectangle2, PathLabel(1));
-    let path        = rectangle1.collide(rectangle2, 0.1);
+    let source1 = GraphPath::from_path(&source1, PathLabel(0));
+    let source2 = GraphPath::from_path(&source2, PathLabel(1));
+    let path    = source1.clone().collide(source2.clone(), 0.1);
 
     // TODO: add some assertionsl; this shape does produce the bug
     println!("{}", graph_path_svg_string(&path, vec![]));
 
-    assert!(false);
+    // Should create 2 extra edges in the path (the overlapped edges from both rectangles)
+    let source1_num_edges = source1.all_edges().count();
+    let source2_num_edges = source2.all_edges().count();
+    assert!(path.all_edges().count() == source1_num_edges + source2_num_edges + 2, "{} {} {}", source1.all_edges().count(), source2.all_edges().count(), path.all_edges().count());
 }
