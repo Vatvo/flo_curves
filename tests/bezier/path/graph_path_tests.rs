@@ -3,6 +3,7 @@ use super::checks::*;
 use flo_curves::*;
 use flo_curves::arc::*;
 use flo_curves::bezier::path::*;
+use flo_curves::debug::*;
 
 use std::f64;
 
@@ -1782,4 +1783,63 @@ pub fn ray_cast_converging_curves() {
             assert!(actual_collisions.is_none() || actual_collisions == Some(expected_collisions));
         }
     }
+}
+
+#[test]
+pub fn collisions_with_edge_ends_1() {
+    // Two rectangles that overlap on a single edge, which is moving in a different direction
+    let rectangle1 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(1.0, 4.0))
+        .line_to(Coord2(5.0, 4.0))
+        .line_to(Coord2(5.0, 8.0))
+        .line_to(Coord2(1.0, 8.0))
+        .line_to(Coord2(1.0, 4.0))
+        .build();
+    let rectangle2 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(5.0, 1.0))
+        .line_to(Coord2(9.0, 1.0))
+        .line_to(Coord2(9.0, 5.0))
+        .line_to(Coord2(5.0, 5.0))
+        .line_to(Coord2(5.0, 1.0))
+        .build();
+
+    // Collide the two paths to get a result
+    let rectangle1  = GraphPath::from_path(&rectangle1, PathLabel(0));
+    let rectangle2  = GraphPath::from_path(&rectangle2, PathLabel(1));
+    let path        = rectangle1.collide(rectangle2, 0.1);
+
+    // TODO: add some assertions (this is working at the moment)
+    println!("{}", graph_path_svg_string(&path, vec![]));
+}
+
+
+#[test]
+pub fn collisions_with_edge_ends_2() {
+    // Two rectangles that overlap on a single edge, which is moving in a different direction
+    let rectangle1 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(272.0, 496.0))
+            .curve_to((Coord2(373.33, 496.0), Coord2(378.66, 496.0)), Coord2(384.0, 496.0))
+            .curve_to((Coord2(384.0, 450.66), Coord2(384.0, 421.33)), Coord2(384.0, 392.0))
+            .curve_to((Coord2(384.0, 356.7), Coord2(355.29, 328.0)), Coord2(320.0, 328.0))
+            .curve_to((Coord2(284.7, 328.0), Coord2(256.0, 356.7)), Coord2(256.0, 392.0))
+            .curve_to((Coord2(256.0, 485.33), Coord2(256.0, 490.66)), Coord2(256.0, 496.0))
+            .build();
+    let rectangle2 = BezierPathBuilder::<SimpleBezierPath>::start(Coord2(384.0, 352.0))
+            .curve_to((Coord2(384.0, 394.68), Coord2(384.0, 437.34)), Coord2(384.0, 480.0)) //This line required custom rounding. I truncated every other number in the test but this one required rounding up to make the bug happen.
+            .curve_to((Coord2(384.0, 491.7), Coord2(387.1, 502.6)), Coord2(392.6, 512.0))
+            .curve_to((Coord2(475.08, 512.0), Coord2(557.54, 512.0)), Coord2(640.0, 512.0))
+            .curve_to((Coord2(640.0, 440.18), Coord2(640.0, 368.39)), Coord2(640.0, 296.6))
+            .curve_to((Coord2(640.0, 288.39), Coord2(640.0, 280.19)), Coord2(640.0, 272.0))
+            .curve_to((Coord2(640.0, 210.1), Coord2(589.9, 160.0)), Coord2(528.0, 160.0))
+            .curve_to((Coord2(466.09, 160.0), Coord2(416.0, 210.1)), Coord2(416.0, 272.0))
+            .curve_to((Coord2(416.0, 280.2), Coord2(416.0, 288.4)), Coord2(416.0, 296.6))
+            .curve_to((Coord2(396.89, 307.6), Coord2(384.0, 328.29)), Coord2(384.0, 352.0))
+            .build();
+
+    // Collide the two paths to get a result
+    let rectangle1  = GraphPath::from_path(&rectangle1, PathLabel(0));
+    let rectangle2  = GraphPath::from_path(&rectangle2, PathLabel(1));
+    let path        = rectangle1.collide(rectangle2, 0.1);
+
+    // TODO: add some assertionsl; this shape does produce the bug
+    println!("{}", graph_path_svg_string(&path, vec![]));
+
+    assert!(false);
 }
