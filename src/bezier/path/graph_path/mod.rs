@@ -16,10 +16,7 @@ mod path_collision;
 
 #[cfg(test)] pub (crate) mod test;
 
-pub use self::edge::*;
-pub use self::edge_ref::*;
 pub use self::ray_collision::*;
-pub use self::path_collision::*;
 
 /// Maximum number of edges to traverse when 'healing' gaps found in an external path
 const MAX_HEAL_DEPTH: usize = 3;
