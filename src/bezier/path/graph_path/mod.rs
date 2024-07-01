@@ -383,8 +383,8 @@ impl<Point: Coordinate+Coordinate2D, Label: Copy> GraphPath<Point, Label> {
         new_points.extend(merge_path.points.into_iter()
             .map(|mut point| {
                 // Update the offsets in the edges
-                for mut edge in &mut point.forward_edges {
-                    edge.end_idx            += offset;
+                for edge in &mut point.forward_edges {
+                    edge.end_idx += offset;
                 }
 
                 for previous_point in &mut point.connected_from {
