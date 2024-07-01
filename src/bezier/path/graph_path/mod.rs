@@ -16,10 +16,7 @@ mod path_collision;
 
 #[cfg(test)] pub (crate) mod test;
 
-pub use self::edge::*;
-pub use self::edge_ref::*;
 pub use self::ray_collision::*;
-pub use self::path_collision::*;
 
 /// Maximum number of edges to traverse when 'healing' gaps found in an external path
 const MAX_HEAL_DEPTH: usize = 3;
@@ -386,8 +383,8 @@ impl<Point: Coordinate+Coordinate2D, Label: Copy> GraphPath<Point, Label> {
         new_points.extend(merge_path.points.into_iter()
             .map(|mut point| {
                 // Update the offsets in the edges
-                for mut edge in &mut point.forward_edges {
-                    edge.end_idx            += offset;
+                for edge in &mut point.forward_edges {
+                    edge.end_idx += offset;
                 }
 
                 for previous_point in &mut point.connected_from {
